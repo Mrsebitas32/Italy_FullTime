@@ -4,6 +4,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Pedir contraseña antes de mostrar la app
+password = st.text_input("🔒 Ingresa la contraseña:", type="password")
+
+if password != st.secrets["PASSWORD"]:
+    st.warning("Contraseña incorrecta. Intenta de nuevo.")
+    st.stop()  # Detiene la app si la contraseña es incorrecta
+
+st.success("✅ Bienvenido a la app")
+
 #------------------------------------------------------------------------------
 # DATOS (Scraping de la página Totalcorner.com)
 #------------------------------------------------------------------------------
