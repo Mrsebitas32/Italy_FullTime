@@ -8,8 +8,7 @@ import seaborn as sns
 # DATOS (Scraping de la página Totalcorner.com)
 #------------------------------------------------------------------------------
 
-# data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
-data = pd.read_excel('Italy Corners (Serie A).xlsx')
+data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
 
 # Eliminar las primeras 20 filas
 data = data.iloc[0:].reset_index(drop=True)
@@ -71,17 +70,21 @@ corners_data["FT (+10.5)"] = corners_data["Home Corners"] + corners_data["Away C
 corners_data["FT (+11.5)"] = corners_data["Home Corners"] + corners_data["Away Corners"] > 11.5
 corners_data["FT (+12.5)"] = corners_data["Home Corners"] + corners_data["Away Corners"] > 12.5
 
+corners_data["FT Home (+1.5)"] = corners_data["Home Corners"] > 1.5
 corners_data["FT Home (+2.5)"] = corners_data["Home Corners"] > 2.5
 corners_data["FT Home (+3.5)"] = corners_data["Home Corners"] > 3.5
 corners_data["FT Home (+4.5)"] = corners_data["Home Corners"] > 4.5
 corners_data["FT Home (+5.5)"] = corners_data["Home Corners"] > 5.5
 corners_data["FT Home (+6.5)"] = corners_data["Home Corners"] > 6.5
+corners_data["FT Home (+7.5)"] = corners_data["Home Corners"] > 7.5
 
+corners_data["FT Away (+1.5)"] = corners_data["Away Corners"] > 1.5
 corners_data["FT Away (+2.5)"] = corners_data["Away Corners"] > 2.5
 corners_data["FT Away (+3.5)"] = corners_data["Away Corners"] > 3.5
 corners_data["FT Away (+4.5)"] = corners_data["Away Corners"] > 4.5
 corners_data["FT Away (+5.5)"] = corners_data["Away Corners"] > 5.5
 corners_data["FT Away (+6.5)"] = corners_data["Away Corners"] > 6.5
+corners_data["FT Away (+7.5)"] = corners_data["Away Corners"] > 7.5
 
 # Crear las variables de resultado en la primera mitad
 corners_data["Home Win"] = corners_data["Home Corners"] > corners_data["Away Corners"]
@@ -238,10 +241,10 @@ columns_to_style = [
     "FT (+6.5)", "FT (+7.5)", "FT (+8.5)", "FT (+9.5)", "FT (+10.5)", "FT (+11.5)", "FT (+12.5)",
 
     # Líneas FT para el equipo local (Home)
-    "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)",
+    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)",
 
     # Líneas FT para el equipo visitante (Away)
-    "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)",
+    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)",
 
     # Resultados (ganador/empate) en tiempo completo
     "Home Win", "Away Win", "Draw"
@@ -677,7 +680,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- FOR (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -1006,7 +1009,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- AGAINST (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -1746,10 +1749,10 @@ lines = [
     "FT (+6.5)", "FT (+7.5)", "FT (+8.5)", "FT (+9.5)", "FT (+10.5)", "FT (+11.5)", "FT (+12.5)",
 
     # Líneas FT para el equipo local (Home)
-    "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)",
+    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)",
 
     # Líneas FT para el equipo visitante (Away)
-    "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)",
+    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)"
 
 ]
 
@@ -1835,6 +1838,8 @@ def highlight_high_values(s):
             colors.append('background-color: #A52A2A; font-weight: bold; color: white')  # Rojo más oscuro
         elif v < 20:
             colors.append('background-color: #CD5C5C; font-weight: bold; color: white')  # Rojo intermedio
+        elif v < 30:
+            colors.append('background-color: #F08080; font-weight: bold; color: white')  # Rojo intermedio    
         else:
             colors.append('')  # Sin color si no cumple con los umbrales
     return colors    
@@ -1961,8 +1966,8 @@ for i, line in enumerate(lines[:7]):  # Los primeros 7 (FT)
         st.dataframe(styled_df)
 
 # Segunda fila con 5 columnas (Home)
-columns2 = st.columns(5)
-for i, line in enumerate(lines[7:12]):  # Siguientes 5 (Home)
+columns2 = st.columns(7)
+for i, line in enumerate(lines[7:14]):  # Siguientes 5 (Home)
     with columns2[i]:
         st.subheader(f'{line}:')
         # Aplicar formato de color y limitar los decimales a 2, agregando el símbolo %
@@ -1972,8 +1977,8 @@ for i, line in enumerate(lines[7:12]):  # Siguientes 5 (Home)
         st.dataframe(styled_df)
 
 # Tercera fila con 5 columnas (Away)
-columns3 = st.columns(5)
-for i, line in enumerate(lines[12:]):  # Últimos 5 (Away)
+columns3 = st.columns(7)
+for i, line in enumerate(lines[14:]):  # Últimos 5 (Away)
     with columns3[i]:
         st.subheader(f'{line}:')
         # Aplicar formato de color y limitar los decimales a 2, agregando el símbolo %
