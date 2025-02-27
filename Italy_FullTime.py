@@ -8,7 +8,8 @@ import seaborn as sns
 # DATOS (Scraping de la página Totalcorner.com)
 #------------------------------------------------------------------------------
 
-data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
+# data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
+data = pd.read_excel('Italy Corners (Serie A).xlsx')
 
 # Eliminar las primeras 20 filas
 data = data.iloc[0:].reset_index(drop=True)
