@@ -4,22 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Pedir contraseña antes de mostrar la app
-# password = st.text_input("🔒 Ingresa la contraseña:", type="password")
-
-# if password != st.secrets["PASSWORD"]:
-#     st.warning("Contraseña incorrecta. Intenta de nuevo.")
-#     st.stop()  # Detiene la app si la contraseña es incorrecta
-
-# st.success("✅ Bienvenido a la app")
-
 #------------------------------------------------------------------------------
 # DATOS (Scraping de la página Totalcorner.com)
 #------------------------------------------------------------------------------
 
-# data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
-# data = pd.read_excel('Italy Corners (Serie A).xlsx')
-data = pd.read_excel('Italy Corners (Serie A).xlsx', engine='openpyxl')
+data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
 
 # Eliminar las primeras 20 filas
 data = data.iloc[0:].reset_index(drop=True)
@@ -687,7 +676,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- FOR (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [2.5, 3.5, 4.5, 5.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -1016,7 +1005,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- AGAINST (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [2.5, 3.5, 4.5, 5.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -1342,7 +1331,7 @@ st.pyplot(fig)
 #---------------------------------------------------------------------------- TOTAL (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [6.5, 7.5, 8.5, 9.5]
+corner_thresholds = [6.5, 7.5, 8.5, 9.5, 12.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
