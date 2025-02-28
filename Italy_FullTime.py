@@ -8,8 +8,7 @@ import seaborn as sns
 # DATOS (Scraping de la página Totalcorner.com)
 #------------------------------------------------------------------------------
 
-# data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
-data = pd.read_excel('Italy Corners (Serie A).xlsx')
+data = pd.read_excel('C:/Users/user/Desktop/Bet Data/Italy/Italy Corners (Serie A).xlsx')
 
 # Eliminar las primeras 20 filas
 data = data.iloc[0:].reset_index(drop=True)
@@ -78,6 +77,7 @@ corners_data["FT Home (+4.5)"] = corners_data["Home Corners"] > 4.5
 corners_data["FT Home (+5.5)"] = corners_data["Home Corners"] > 5.5
 corners_data["FT Home (+6.5)"] = corners_data["Home Corners"] > 6.5
 corners_data["FT Home (+7.5)"] = corners_data["Home Corners"] > 7.5
+corners_data["FT Home (+8.5)"] = corners_data["Home Corners"] > 8.5
 
 corners_data["FT Away (+1.5)"] = corners_data["Away Corners"] > 1.5
 corners_data["FT Away (+2.5)"] = corners_data["Away Corners"] > 2.5
@@ -86,11 +86,18 @@ corners_data["FT Away (+4.5)"] = corners_data["Away Corners"] > 4.5
 corners_data["FT Away (+5.5)"] = corners_data["Away Corners"] > 5.5
 corners_data["FT Away (+6.5)"] = corners_data["Away Corners"] > 6.5
 corners_data["FT Away (+7.5)"] = corners_data["Away Corners"] > 7.5
+corners_data["FT Away (+8.5)"] = corners_data["Away Corners"] > 8.5
 
-# Crear las variables de resultado en la primera mitad
+# Crear las variables de ganador 
 corners_data["Home Win"] = corners_data["Home Corners"] > corners_data["Away Corners"]
 corners_data["Away Win"] = corners_data["Away Corners"] > corners_data["Home Corners"]
 corners_data["Draw"] = corners_data["Home Corners"] == corners_data["Away Corners"]
+
+
+# Crear las variables de tiempo con más corners
+corners_data["1H More Corners"] = data["1H More Corners"]
+corners_data["2H More Corners"] = data["2H More Corners"]
+corners_data["DRAW More Corners"] = data["DRAW More Corners"]
 
 #------------------------------------------------------------------------------ 
 # LÍNEAS DE HÁNDICAP (FULL TIME) - Desde -4.5 hasta +4.5 
@@ -242,13 +249,15 @@ columns_to_style = [
     "FT (+6.5)", "FT (+7.5)", "FT (+8.5)", "FT (+9.5)", "FT (+10.5)", "FT (+11.5)", "FT (+12.5)",
 
     # Líneas FT para el equipo local (Home)
-    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)",
+    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)", "FT Home (+8.5)",
 
     # Líneas FT para el equipo visitante (Away)
-    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)",
+    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)", "FT Away (+8.5)",
 
     # Resultados (ganador/empate) en tiempo completo
-    "Home Win", "Away Win", "Draw"
+    "Home Win", "Away Win", "Draw",
+    
+    "1H More Corners", "2H More Corners", "DRAW More Corners"
 ]
 
 # Añadir las columnas correspondientes a cada valor de hándicap
@@ -681,7 +690,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- FOR (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -722,7 +731,7 @@ away_heatmap_data.loc["Average"] = away_avg_row
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))  # Adjusted to make both heatmaps visible
 
 # Home heatmap
-sns.heatmap(home_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
+sns.heatmap(home_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(home_heatmap_data.columns)):
@@ -734,7 +743,7 @@ ax1.set_xlabel("Threshold")
 ax1.set_ylabel("Team")
 
 # Away heatmap
-sns.heatmap(away_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
+sns.heatmap(away_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(away_heatmap_data.columns)):
@@ -1010,7 +1019,7 @@ st.pyplot(fig)
 # ---------------------------------------------------------------------------- AGAINST (HEATMAP)
 
 # Define thresholds
-corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
+corner_thresholds = [1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5]
 
 # Calculate probabilities for Home teams
 home_probabilities = {
@@ -1051,7 +1060,7 @@ away_heatmap_data.loc["Average"] = away_avg_row
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))  # Adjusted to make both heatmaps visible
 
 # Home heatmap
-sns.heatmap(home_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
+sns.heatmap(home_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(home_heatmap_data.columns)):
@@ -1063,7 +1072,7 @@ ax1.set_xlabel("Threshold")
 ax1.set_ylabel("Team")
 
 # Away heatmap
-sns.heatmap(away_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
+sns.heatmap(away_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(away_heatmap_data.columns)):
@@ -1377,7 +1386,7 @@ away_heatmap_data.loc["Average"] = away_avg_row
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))  # Adjusted to make both heatmaps visible
 
 # Home heatmap
-sns.heatmap(home_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
+sns.heatmap(home_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(home_heatmap_data.columns)):
@@ -1389,7 +1398,7 @@ ax1.set_xlabel("Threshold")
 ax1.set_ylabel("Team")
 
 # Away heatmap
-sns.heatmap(away_heatmap_data, annot=True, cmap="coolwarm", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
+sns.heatmap(away_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
 
 # Make the "Average" row bold and thicker borders
 for t in range(len(away_heatmap_data.columns)):
@@ -1402,6 +1411,159 @@ ax2.set_ylabel("Team")
 
 # Display the plot in Streamlit with adjusted size
 st.pyplot(fig, use_container_width=True)
+
+
+
+#---------------------------------------------------------------------------- HALF WITH MORE CORNERS (HEATMAP)
+
+
+# Definir las categorías
+half_corner_categories = ["1H More Corners", "2H More Corners", "DRAW More Corners"]
+
+# Calcular probabilidades para equipos locales
+home_half_probabilities = {
+    team: [
+        home_data[(home_data['Home'] == team) & (home_data[category])].shape[0] / 
+        home_data[home_data['Home'] == team].shape[0] * 100
+        for category in half_corner_categories
+    ]
+    for team in home_data['Home'].unique()
+}
+
+# Calcular probabilidades para equipos visitantes
+away_half_probabilities = {
+    team: [
+        away_data[(away_data['Away'] == team) & (away_data[category])].shape[0] / 
+        away_data[away_data['Away'] == team].shape[0] * 100
+        for category in half_corner_categories
+    ]
+    for team in away_data['Away'].unique()
+}
+
+# Crear DataFrames para los heatmaps
+home_half_heatmap_data = pd.DataFrame(home_half_probabilities, index=half_corner_categories).T
+away_half_heatmap_data = pd.DataFrame(away_half_probabilities, index=half_corner_categories).T
+
+# Ordenar los DataFrames en función de "1H More Corners"
+home_half_heatmap_data = home_half_heatmap_data.sort_values(by="2H More Corners", ascending=False)
+away_half_heatmap_data = away_half_heatmap_data.sort_values(by="2H More Corners", ascending=False)
+
+# Agregar fila promedio
+home_half_avg_row = home_half_heatmap_data.mean(axis=0)
+home_half_heatmap_data.loc["Average"] = home_half_avg_row
+
+away_half_avg_row = away_half_heatmap_data.mean(axis=0)
+away_half_heatmap_data.loc["Average"] = away_half_avg_row
+
+# Crear figuras para los heatmaps
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+# Heatmap de equipos locales
+sns.heatmap(home_half_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
+
+# Resaltar la fila "Average"
+for t in range(len(home_half_heatmap_data.columns)):
+    if home_half_heatmap_data.index[-1] == "Average":
+        ax1.add_patch(plt.Rectangle((t, len(home_half_heatmap_data) - 1), 1, 1, fill=False, edgecolor='black', lw=2))
+
+ax1.set_title("Probability of More Corners in a Half (Home Teams)")
+ax1.set_xlabel("Category")
+ax1.set_ylabel("Team")
+
+# Heatmap de equipos visitantes
+sns.heatmap(away_half_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
+
+# Resaltar la fila "Average"
+for t in range(len(away_half_heatmap_data.columns)):
+    if away_half_heatmap_data.index[-1] == "Average":
+        ax2.add_patch(plt.Rectangle((t, len(away_half_heatmap_data) - 1), 1, 1, fill=False, edgecolor='black', lw=2))
+
+ax2.set_title("Probability of More Corners in a Half (Away Teams)")
+ax2.set_xlabel("Category")
+ax2.set_ylabel("Team")
+
+# Mostrar en Streamlit
+st.pyplot(fig, use_container_width=True)
+
+
+
+#---------------------------------------------------------------------------- CORNERS WINNER PROBABILITIES (HEATMAP)
+
+# Definir las categorías de resultados
+win_categories = ["Home Win", "Away Win", "Draw"]
+
+# Calcular probabilidades para equipos locales
+home_win_probabilities = {
+    team: [
+        home_data[(home_data['Home'] == team) & (home_data[category])].shape[0] / 
+        home_data[home_data['Home'] == team].shape[0] * 100
+        for category in win_categories
+    ]
+    for team in home_data['Home'].unique()
+}
+
+# Calcular probabilidades para equipos visitantes
+away_win_probabilities = {
+    team: [
+        away_data[(away_data['Away'] == team) & (away_data[category])].shape[0] / 
+        away_data[away_data['Away'] == team].shape[0] * 100
+        for category in win_categories
+    ]
+    for team in away_data['Away'].unique()
+}
+
+# Crear DataFrames para los heatmaps
+home_win_heatmap_data = pd.DataFrame(home_win_probabilities, index=win_categories).T
+away_win_heatmap_data = pd.DataFrame(away_win_probabilities, index=win_categories).T
+
+# Ordenar los DataFrames en función de "Home Win"
+home_win_heatmap_data = home_win_heatmap_data.sort_values(by="Home Win", ascending=False)
+away_win_heatmap_data = away_win_heatmap_data.sort_values(by="Away Win", ascending=False)
+
+# Agregar fila promedio
+home_win_avg_row = home_win_heatmap_data.mean(axis=0)
+home_win_heatmap_data.loc["Average"] = home_win_avg_row
+
+away_win_avg_row = away_win_heatmap_data.mean(axis=0)
+away_win_heatmap_data.loc["Average"] = away_win_avg_row
+
+# Crear figuras para los heatmaps
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+# Heatmap de equipos locales (verde = alta probabilidad, rojo = baja probabilidad)
+sns.heatmap(home_win_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax1, linewidths=0.5, linecolor='gray')
+
+# Resaltar la fila "Average"
+for t in range(len(home_win_heatmap_data.columns)):
+    if home_win_heatmap_data.index[-1] == "Average":
+        ax1.add_patch(plt.Rectangle((t, len(home_win_heatmap_data) - 1), 1, 1, fill=False, edgecolor='black', lw=2))
+
+ax1.set_title("Win Probability (Home Teams)")
+ax1.set_xlabel("Category")
+ax1.set_ylabel("Team")
+
+# Heatmap de equipos visitantes
+sns.heatmap(away_win_heatmap_data, annot=True, cmap="RdYlGn", fmt=".1f", ax=ax2, linewidths=0.5, linecolor='gray')
+
+# Resaltar la fila "Average"
+for t in range(len(away_win_heatmap_data.columns)):
+    if away_win_heatmap_data.index[-1] == "Average":
+        ax2.add_patch(plt.Rectangle((t, len(away_win_heatmap_data) - 1), 1, 1, fill=False, edgecolor='black', lw=2))
+
+ax2.set_title("Win Probability (Away Teams)")
+ax2.set_xlabel("Category")
+ax2.set_ylabel("Team")
+
+# Mostrar en Streamlit
+st.pyplot(fig, use_container_width=True)
+
+
+
+
+
+
+
+
 
 # #---------------------------------------------------------------------------- 5 (TENDENCES OVER TIME)
 
@@ -1750,10 +1912,15 @@ lines = [
     "FT (+6.5)", "FT (+7.5)", "FT (+8.5)", "FT (+9.5)", "FT (+10.5)", "FT (+11.5)", "FT (+12.5)",
 
     # Líneas FT para el equipo local (Home)
-    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)",
+    "FT Home (+1.5)", "FT Home (+2.5)", "FT Home (+3.5)", "FT Home (+4.5)", "FT Home (+5.5)", "FT Home (+6.5)", "FT Home (+7.5)", "FT Home (+8.5)",
 
     # Líneas FT para el equipo visitante (Away)
-    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)"
+    "FT Away (+1.5)", "FT Away (+2.5)", "FT Away (+3.5)", "FT Away (+4.5)", "FT Away (+5.5)", "FT Away (+6.5)", "FT Away (+7.5)", "FT Away (+8.5)",
+    
+    # Resultados (ganador/empate) en tiempo completo
+    "Home Win", "Away Win", "Draw",
+    
+    "1H More Corners", "2H More Corners", "DRAW More Corners"
 
 ]
 
@@ -1967,8 +2134,8 @@ for i, line in enumerate(lines[:7]):  # Los primeros 7 (FT)
         st.dataframe(styled_df)
 
 # Segunda fila con 5 columnas (Home)
-columns2 = st.columns(7)
-for i, line in enumerate(lines[7:14]):  # Siguientes 5 (Home)
+columns2 = st.columns(8)
+for i, line in enumerate(lines[7:15]):  # Siguientes 5 (Home)
     with columns2[i]:
         st.subheader(f'{line}:')
         # Aplicar formato de color y limitar los decimales a 2, agregando el símbolo %
@@ -1978,8 +2145,8 @@ for i, line in enumerate(lines[7:14]):  # Siguientes 5 (Home)
         st.dataframe(styled_df)
 
 # Tercera fila con 5 columnas (Away)
-columns3 = st.columns(7)
-for i, line in enumerate(lines[14:]):  # Últimos 5 (Away)
+columns3 = st.columns(8)
+for i, line in enumerate(lines[15:23]):  # Últimos 5 (Away)
     with columns3[i]:
         st.subheader(f'{line}:')
         # Aplicar formato de color y limitar los decimales a 2, agregando el símbolo %
@@ -1988,7 +2155,16 @@ for i, line in enumerate(lines[14:]):  # Últimos 5 (Away)
         }).apply(highlight_high_values, subset=[f'{line} (%)'])
         st.dataframe(styled_df)
 
-
+# Cuarta fila con 6 columnas ()
+columns4 = st.columns(6)
+for i, line in enumerate(lines[23:]):  # Últimos 5 (Away)
+    with columns3[i]:
+        st.subheader(f'{line}:')
+        # Aplicar formato de color y limitar los decimales a 2, agregando el símbolo %
+        styled_df = ranking_dfs[line].style.format({
+            f'{line} (%)': "{:.2f}%"
+        }).apply(highlight_high_values, subset=[f'{line} (%)'])
+        st.dataframe(styled_df)
 
 # # Primera fila con 5 columnas (nuevas líneas)
 # columns4 = st.columns(5)
